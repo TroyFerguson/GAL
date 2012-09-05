@@ -1,19 +1,21 @@
 #ifndef _GENETIC_ALGORITHM_H_
 #define _GENETIC_ALGORITHM_H_
 
+#include "Assertion.h"
+
 #include <vector>
 #include "Genome.h"
+#include "Gene.h"
 
 namespace GAL
 {
-	template< class T, class Y >
 	class GeneticAlgorithm
 	{
 	public:
 
-		typedef void (*CrossoverOperator)( Genome< T >, Genome< T >, Genome< T >&, Genome< T >& );
-		typedef Genome< T > (*SelectionOperator)();
-		typedef void (*MutationOperator)( Genome< T >& );
+		typedef void (*CrossoverOperator)( Genome, Genome, Genome&, Genome& );
+		typedef Genome (*SelectionOperator)();
+		typedef void (*MutationOperator)( Genome& );
 
 		explicit GeneticAlgorithm	(	double CrossoverRate,
 										double MutationRate,
@@ -21,7 +23,8 @@ namespace GAL
 										int PopulationSize,
 										CrossoverOperator Crossover = NULL,
 										SelectionOperator SelectGenome = NULL,
-										MutationOperator Mutate = NULL
+										MutationOperator Mutate = NULL,
+										Genome::GeneConstructor CreateGene = NULL
 									) : CrossoverRate( CrossoverRate ),
 										MutationRate( MutationRate ),
 										ChromosomeLength( ChromosomeLength ),
@@ -30,8 +33,13 @@ namespace GAL
 										Generation( 0 ),
 										Crossover( Crossover ),
 										Mutate( Mutate ),
-										SelectGenome( SelectGenome )
+										SelectGenome( SelectGenome ),
+										CreateGene( CreateGene )
 		{
+			ASSERT( Crossover != NULL );
+			ASSERT( Mutate != NULL );
+			ASSERT( SelectGenome != NULL );
+			ASSERT( CreateGene != NULL );
 			Reset();
 		}
 
@@ -40,8 +48,8 @@ namespace GAL
 
 	private:
 		int Generation;
-		int PopulationSize;
-		std::vector< Genome< T > > Population;
+		unsigned int PopulationSize;
+		std::vector< Genome > Population;
 
 		int ChromosomeLength;
 		
@@ -53,11 +61,10 @@ namespace GAL
 
 		void UpdateFitnessScores();
 
-		virtual Y Decode( Genome< T > ) = 0;
-		virtual void CalculateFitness( Genome< T >& ) = 0;
+		virtual void CalculateFitness( Genome& ) = 0;
 
 		virtual void PreEpoch(){};
-		virtual void PerformElitism( std::vector< Genome< T > >& ){};
+		virtual void PerformElitism( std::vector< Genome >& ){};
 		virtual void PostEpoch(){};
 
 		void CreateNewGeneration();
@@ -66,34 +73,33 @@ namespace GAL
 		CrossoverOperator Crossover;
 		MutationOperator Mutate;
 		SelectionOperator SelectGenome;
+		Genome::GeneConstructor CreateGene;
 	};
 
-	template< class T, class Y >
-	void GAL::GeneticAlgorithm< T, Y >::Epoch()
+	void GAL::GeneticAlgorithm::Epoch()
 	{
 		PreEpoch();
 		CreateNewGeneration();
 		PostEpoch();
 	}
 
-	template< class T, class Y >
-	void GAL::GeneticAlgorithm< T, Y >::CreateNewGeneration()
+	void GAL::GeneticAlgorithm::CreateNewGeneration()
 	{
-		std::vector< Genome< T > > NewGeneration;
+		std::vector< Genome > NewGeneration;
 
-		PerformElitism( &NewGeneration );
+		PerformElitism( NewGeneration );
 
 		while( NewGeneration.size() < PopulationSize )
 		{
-			Genome< T > Mum = (*SelectGenome)();
-			Genome< T > Dad = (*SelectGenome)();
+			Genome Mum = (*SelectGenome)();
+			Genome Dad = (*SelectGenome)();
 
-			Genome< T > Daughter, Son;
+			Genome Daughter, Son;
 
 			(*Crossover)( Mum, Dad, Daughter, Son );
 
-			(*Mutate)( &Daughter );
-			(*Mutate)( &Son );
+			(*Mutate)( Daughter );
+			(*Mutate)( Son );
 
 			NewGeneration.push_back( Daughter );
 			NewGeneration.push_back( Son );
@@ -105,25 +111,23 @@ namespace GAL
 		++Generation;
 	}
 
-	template< class T, class Y >
-	void GAL::GeneticAlgorithm< T, Y >::Reset()
+	void GAL::GeneticAlgorithm::Reset()
 	{
 		Population.clear();
 
-		for( int Iter = 0; Iter < PopulationSize; Iter++ )
+		for( unsigned int Iter = 0; Iter < PopulationSize; Iter++ )
 		{
-			Population.push_back( Genome< T >( ChromosomeLength ) );
+			Population.push_back( Genome( ChromosomeLength, CreateGene ) );
 		}
 
 		Generation = 0;
 	}
 
-	template< class T, class Y >
-	void GAL::GeneticAlgorithm< T, Y >::UpdateFitnessScores()
+	void GAL::GeneticAlgorithm::UpdateFitnessScores()
 	{
-		for( int Iter = 0; Iter < Population.Size(); Iter++ )
+		for( unsigned int Iter = 0; Iter < Population.size(); Iter++ )
 		{
-			CalculateFitness( &Population[ Iter ] );
+			CalculateFitness( Population[ Iter ] );
 		}
 	}
 

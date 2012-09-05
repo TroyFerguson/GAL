@@ -60,6 +60,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Assertion.h" />
     <ClInclude Include="CrossoverOperators.h" />
     <ClInclude Include="Gene.h" />
     <ClInclude Include="GeneticAlgorithm.h" />

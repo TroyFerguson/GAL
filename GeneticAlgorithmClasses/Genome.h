@@ -2,36 +2,50 @@
 #define _GENOME_H_
 
 #include <vector>
+#include "Gene.h"
 
 namespace GAL
 {
-	template < class T >
 	class Genome
 	{
 	private:
 		double Fitness;
-		std::vector< T > Genes;
+		std::vector< Gene* > Genes;
 
 	public:
-		explicit Genome( int GenomeLength ) : Fitness( 0.0f )
+		typedef Gene* (*GeneConstructor)();
+
+		explicit Genome() : Fitness( 0.0f ) {}
+
+		explicit Genome( int ChromosomeLength, GeneConstructor CreateGene )	:	Fitness( 0.0f )
 		{
-			for( int Iter = 0; Iter < GenomeLength; Iter++ )
+			for( int iter = 0; iter < ChromosomeLength; iter++ )
 			{
-				Genes.push_back( T() );
+				Genes.push_back( CreateGene() );
 			}
 		}
 
-		Genome( std::vector< T > Genes )	:	Fitness( 0.0f ),
-												Genes( Genes )
+		explicit Genome( std::vector< Gene* > Genes )	:	Fitness( 0.0f ),
+															Genes( Genes )
 		{}
+
+		~Genome();
 
 		inline double GetFitness() { return Fitness; }
 		inline void SetFitness( double NewFitness ) { Fitness = NewFitness; }
 
-		inline const std::vector< T > GetGenes() const { return Genes; }
-		inline void SetGenes( std::vector< T > NewGenes ) { Genes = NewGenes; }
+		inline const std::vector< Gene* > GetGenes() const { return Genes; }
+		inline void SetGenes( std::vector< Gene* > NewGenes ) { Genes = NewGenes; }
 
 	};
+
+	Genome::~Genome()
+	{
+		for( std::vector< Gene* >::iterator iter = Genes.begin(); iter != Genes.end(); iter++ )
+		{
+			delete (*iter);//TODO: Check that this isn't retarded
+		}
+	}
 }
 
 #endif

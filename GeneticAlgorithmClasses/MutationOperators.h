@@ -9,21 +9,17 @@ namespace GAL
 {
 	namespace Operators
 	{
-		template< class T >
-		struct DefferedMutator
+		void DeferredMutation( Genome &Mutatee )
 		{
-			void operator() ( Genome< T > &Mutatee )
+			std::vector< Gene* > Genes = Mutatee.GetGenes();
+
+			for( std::vector< Gene* >::iterator iter = Genes.begin(); iter != Genes.end(); iter++ )
 			{
-				const std::vector< T > Genes = Mutatee.GetGenes();
-
-				for( std::vector< T >::iterator iter = Genes.begin(); iter != Genes.end(); iter++ )
-				{
-					(Gene)(*iter).Mutate();
-				}
-
-				Mutatee.SetGenes( Genes );
+				(*iter)->Mutate();
 			}
-		};
+
+			Mutatee.SetGenes( Genes );
+		}
 	}
 }
 
