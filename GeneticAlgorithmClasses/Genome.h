@@ -32,6 +32,7 @@ namespace GAL
 		~Genome();
 
 		bool operator==( const Genome& ) const;
+		const Gene* operator[]( int Index ) const;
 
 		inline double GetFitness() { return Fitness; }
 		inline void SetFitness( double NewFitness ) { Fitness = NewFitness; }
@@ -51,22 +52,25 @@ namespace GAL
 
 	bool Genome::operator==( const Genome &lhs ) const
 	{
-		std::vector< Gene* > LhsGenes = lhs.GetGenes();
-
-		if( Genes.size() != LhsGenes.size() )
+		if( Genes.size() != lhs.GetGenes().size() )
 		{
 			return false;
 		}
 		
 		for( unsigned int iter = 0; iter < Genes.size(); iter++ )
 		{
-			if( Genes[iter] != LhsGenes[iter] )
+			if( Genes[iter] != lhs[iter] )
 			{
 				return false;
 			}
 		}
 
 		return true;
+	}
+
+	const Gene* Genome::operator[]( int Index ) const
+	{
+		return Genes[ Index ];
 	}
 }
 
