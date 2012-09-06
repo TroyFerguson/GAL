@@ -31,6 +31,8 @@ namespace GAL
 
 		~Genome();
 
+		bool operator==( const Genome& ) const;
+
 		inline double GetFitness() { return Fitness; }
 		inline void SetFitness( double NewFitness ) { Fitness = NewFitness; }
 
@@ -45,6 +47,26 @@ namespace GAL
 		{
 			delete (*iter);//TODO: Check that this isn't retarded
 		}
+	}
+
+	bool Genome::operator==( const Genome &lhs ) const
+	{
+		std::vector< Gene* > LhsGenes = lhs.GetGenes();
+
+		if( Genes.size() != LhsGenes.size() )
+		{
+			return false;
+		}
+		
+		for( unsigned int iter = 0; iter < Genes.size(); iter++ )
+		{
+			if( Genes[iter] != LhsGenes[iter] )
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
 

@@ -13,9 +13,9 @@ namespace GAL
 	{
 	public:
 
-		typedef void (*CrossoverOperator)( Genome, Genome, Genome&, Genome& );
+		typedef void (*CrossoverOperator)( const Genome&, const Genome&, Genome&, Genome&, double );
 		typedef Genome (*SelectionOperator)();
-		typedef void (*MutationOperator)( Genome& );
+		typedef void (*MutationOperator)( Genome&, double );
 
 		explicit GeneticAlgorithm	(	double CrossoverRate,
 										double MutationRate,
@@ -96,10 +96,10 @@ namespace GAL
 
 			Genome Daughter, Son;
 
-			(*Crossover)( Mum, Dad, Daughter, Son );
+			(*Crossover)( Mum, Dad, Daughter, Son, CrossoverRate );
 
-			(*Mutate)( Daughter );
-			(*Mutate)( Son );
+			(*Mutate)( Daughter, MutationRate );
+			(*Mutate)( Son, MutationRate );
 
 			NewGeneration.push_back( Daughter );
 			NewGeneration.push_back( Son );

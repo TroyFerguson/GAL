@@ -67,6 +67,7 @@
     <ClInclude Include="GeneticOperators.h" />
     <ClInclude Include="Genome.h" />
     <ClInclude Include="MutationOperators.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="SelectionOperators.h" />
   </ItemGroup>
   <ItemGroup>
