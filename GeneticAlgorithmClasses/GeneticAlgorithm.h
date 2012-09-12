@@ -14,7 +14,7 @@ namespace GAL
 	public:
 
 		typedef void (*CrossoverOperator)( const Genome&, const Genome&, Genome&, Genome&, double );
-		typedef Genome (*SelectionOperator)();
+		typedef Genome (*SelectionOperator)( const std::vector< Genome >& );
 		typedef void (*MutationOperator)( Genome&, double );
 
 		explicit GeneticAlgorithm	(	double CrossoverRate,
@@ -91,8 +91,8 @@ namespace GAL
 
 		while( NewGeneration.size() < PopulationSize )
 		{
-			Genome Mum = (*SelectGenome)();
-			Genome Dad = (*SelectGenome)();
+			Genome Mum = (*SelectGenome)( Population );
+			Genome Dad = (*SelectGenome)( Population );
 
 			Genome Daughter, Son;
 

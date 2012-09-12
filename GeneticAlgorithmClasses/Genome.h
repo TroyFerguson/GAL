@@ -2,6 +2,7 @@
 #define _GENOME_H_
 
 #include <vector>
+#include <algorithm>
 #include "Gene.h"
 
 namespace GAL
@@ -11,6 +12,8 @@ namespace GAL
 	private:
 		double Fitness;
 		std::vector< Gene* > Genes;
+
+		void Clear();
 
 	public:
 		typedef Gene* (*GeneConstructor)();
@@ -29,25 +32,40 @@ namespace GAL
 															Genes( Genes )
 		{}
 
+		Genome( const Genome& Other )	:	Fitness( Other.GetFitness() ),
+													Genes( Other.GetGenes() )
+		{}
+
 		~Genome();
 
+		Genome& operator=( const Genome& );
 		bool operator==( const Genome& ) const;
 		const Gene* operator[]( int Index ) const;
 
-		inline double GetFitness() { return Fitness; }
-		inline void SetFitness( double NewFitness ) { Fitness = NewFitness; }
+		double GetFitness() const { return Fitness; }
+		void SetFitness( double NewFitness ) { Fitness = NewFitness; }
 
-		inline const std::vector< Gene* > GetGenes() const { return Genes; }
-		inline void SetGenes( std::vector< Gene* > NewGenes ) { Genes = NewGenes; }
+		const std::vector< Gene* > GetGenes() const { return Genes; }
+		void SetGenes( std::vector< Gene* > NewGenes ) { Genes = NewGenes; }
 
 	};
 
 	Genome::~Genome()
 	{
-		for( std::vector< Gene* >::iterator iter = Genes.begin(); iter != Genes.end(); iter++ )
+		Clear();
+	}
+
+	Genome& Genome::operator=( const Genome &Other )
+	{
+		if( this != &Other )
 		{
-			delete (*iter);//TODO: Check that this isn't retarded
+			Clear();
+
+			Fitness = Other.GetFitness();
+			Genes = Other.GetGenes();
 		}
+
+		return *this;
 	}
 
 	bool Genome::operator==( const Genome &lhs ) const
@@ -71,6 +89,14 @@ namespace GAL
 	const Gene* Genome::operator[]( int Index ) const
 	{
 		return Genes[ Index ];
+	}
+
+	void Genome::Clear()
+	{
+		for( std::vector< Gene* >::iterator iter = Genes.begin(); iter != Genes.end(); iter++ )
+		{
+			delete (*iter);
+		}
 	}
 }
 
