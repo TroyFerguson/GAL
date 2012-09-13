@@ -48,6 +48,8 @@ namespace GAL
 		const std::vector< Gene* > GetGenes() const { return Genes; }
 		void SetGenes( std::vector< Gene* > NewGenes ) { Genes = NewGenes; }
 
+		unsigned int Size() const { return Genes.size(); }
+
 	};
 
 	Genome::~Genome()
