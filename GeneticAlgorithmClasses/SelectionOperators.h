@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "Genome.h"
-#include "Random.h"
+#include "Random\Random.h"
 
 namespace GAL
 {

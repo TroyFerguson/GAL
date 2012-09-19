@@ -2,7 +2,7 @@
 #define _CROSSOVER_OPERATORS_H_
 
 #include "Genome.h"
-#include "Random.h"
+#include "Random\Random.h"
 
 namespace GAL
 {

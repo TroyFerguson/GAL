@@ -6,7 +6,7 @@ namespace GAL
 	class Gene
 	{
 	public:
-		virtual ~Gene();
+		virtual ~Gene(){}
 		virtual void Mutate() = 0;
 	};
 }

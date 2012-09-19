@@ -2,7 +2,7 @@
 #include "Point.h"
 #include "Genome.h"
 #include "MGAGene.h"
-#include "Assertion.h"
+#include "Assert\Assertion.h"
 
 #include <iostream>
 

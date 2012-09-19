@@ -2,7 +2,7 @@
 #define _MGAGENE_H_
 
 #include "Gene.h"
-#include "Random.h"
+#include "Random\Random.h"
 
 namespace MGA
 {

@@ -1,7 +1,7 @@
 #ifndef _GENETIC_ALGORITHM_H_
 #define _GENETIC_ALGORITHM_H_
 
-#include "Assertion.h"
+#include "Assert\Assertion.h"
 
 #include <vector>
 #include "Genome.h"
@@ -75,61 +75,6 @@ namespace GAL
 		SelectionOperator SelectGenome;
 		Genome::GeneConstructor CreateGene;
 	};
-
-	void GAL::GeneticAlgorithm::Epoch()
-	{
-		PreEpoch();
-		CreateNewGeneration();
-		PostEpoch();
-	}
-
-	void GAL::GeneticAlgorithm::CreateNewGeneration()
-	{
-		std::vector< Genome > NewGeneration;
-
-		PerformElitism( NewGeneration );
-
-		while( NewGeneration.size() < PopulationSize )
-		{
-			Genome Mum = (*SelectGenome)( Population );
-			Genome Dad = (*SelectGenome)( Population );
-
-			Genome Daughter, Son;
-
-			(*Crossover)( Mum, Dad, Daughter, Son, CrossoverRate );
-
-			(*Mutate)( Daughter, MutationRate );
-			(*Mutate)( Son, MutationRate );
-
-			NewGeneration.push_back( Daughter );
-			NewGeneration.push_back( Son );
-
-		}
-
-		Population = NewGeneration;
-
-		++Generation;
-	}
-
-	void GAL::GeneticAlgorithm::Reset()
-	{
-		Population.clear();
-
-		for( unsigned int Iter = 0; Iter < PopulationSize; Iter++ )
-		{
-			Population.push_back( Genome( ChromosomeLength, CreateGene ) );
-		}
-
-		Generation = 0;
-	}
-
-	void GAL::GeneticAlgorithm::UpdateFitnessScores()
-	{
-		for( unsigned int Iter = 0; Iter < Population.size(); Iter++ )
-		{
-			CalculateFitness( Population[ Iter ] );
-		}
-	}
 
 }
 

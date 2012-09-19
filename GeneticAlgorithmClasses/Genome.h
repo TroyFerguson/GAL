@@ -52,54 +52,6 @@ namespace GAL
 
 	};
 
-	Genome::~Genome()
-	{
-		Clear();
-	}
-
-	Genome& Genome::operator=( const Genome &Other )
-	{
-		if( this != &Other )
-		{
-			Clear();
-
-			Fitness = Other.GetFitness();
-			Genes = Other.GetGenes();
-		}
-
-		return *this;
-	}
-
-	bool Genome::operator==( const Genome &lhs ) const
-	{
-		if( Genes.size() != lhs.GetGenes().size() )
-		{
-			return false;
-		}
-		
-		for( unsigned int iter = 0; iter < Genes.size(); iter++ )
-		{
-			if( Genes[iter] != lhs[iter] )
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	const Gene* Genome::operator[]( int Index ) const
-	{
-		return Genes[ Index ];
-	}
-
-	void Genome::Clear()
-	{
-		for( std::vector< Gene* >::iterator iter = Genes.begin(); iter != Genes.end(); iter++ )
-		{
-			delete (*iter);
-		}
-	}
 }
 
 #endif

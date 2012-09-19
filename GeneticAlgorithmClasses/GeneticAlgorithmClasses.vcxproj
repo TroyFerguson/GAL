@@ -41,6 +41,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Users\Troy\Programming\Git\Util;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -60,17 +61,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Assertion.h" />
     <ClInclude Include="CrossoverOperators.h" />
     <ClInclude Include="Gene.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="GeneticOperators.h" />
     <ClInclude Include="Genome.h" />
     <ClInclude Include="MutationOperators.h" />
-    <ClInclude Include="Random.h" />
     <ClInclude Include="SelectionOperators.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GeneticAlgorithm.cpp" />
+    <ClCompile Include="Genome.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

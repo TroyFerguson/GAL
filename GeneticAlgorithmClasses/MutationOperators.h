@@ -2,7 +2,7 @@
 #define _MUTATION_OPERATORS_H_
 
 #include <vector>
-#include "Random.h"
+#include "Random\Random.h"
 #include "Genome.h"
 #include "Gene.h"
 
